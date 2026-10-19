@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+}
+
+:root {
+  --tk-bg: #0b0e13;
+  --tk-blue: #00a3e0;
+  --tk-blue-hover: #33b8e8;
+  --tk-silver: #c8d0d8;
+  --background: #0b0e13;
+  --foreground: #f4f7fb;
+  --card: #141a22;
+  --card-foreground: #f4f7fb;
+  --popover: #151b24;
+  --popover-foreground: #f4f7fb;
+  --primary: #00a3e0;
+  --primary-foreground: #041018;
+  --secondary: #1c2430;
+  --secondary-foreground: #f4f7fb;
+  --muted: #1c2430;
+  --muted-foreground: #9aa3b2;
+  --accent: #1c2430;
+  --accent-foreground: #f4f7fb;
+  --destructive: #ef4444;
+  --border: rgb(255 255 255 / 12%);
+  --input: rgb(255 255 255 / 14%);
+  --ring: #00a3e0;
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(ellipse at top, rgba(0, 163, 224, 0.12), transparent 55%),
+      linear-gradient(180deg, #0b0e13 0%, #121820 100%);
+    min-height: 100vh;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}

@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CompanySettings {
+  id                 String   @id @default("default")
+  companyName        String   @default("Techno Keys")
+  businessAddress    String   @default("15978 Merriman Road, Livonia, MI 48154")
+  phone              String   @default("313-574-7294")
+  email              String   @default("admin@technokeys.com")
+  taxId              String   @default("41-3721740")
+  logoPath           String   @default("/logo.png")
+  defaultNotes       String   @default("Thank you for choosing Techno Keys.")
+  defaultTaxRate     Float    @default(0)
+  nextInvoiceNumber  Int      @default(1)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Invoice {
+  id              String         @id @default(cuid())
+  number          String         @unique
+  invoiceDate     DateTime       @default(now())
+  dueDate         DateTime?
+  customerName    String
+  customerPhone   String?
+  customerEmail   String?
+  customerAddress String?
+  vehicleYear     String?
+  vehicleMake     String?
+  vehicleModel    String?
+  vehicleVin      String?
+  subtotal        Float          @default(0)
+  taxRate         Float          @default(0)
+  taxAmount       Float          @default(0)
+  discount        Float          @default(0)
+  total           Float          @default(0)
+  paymentStatus   PaymentStatus  @default(UNPAID)
+  paymentMethod   String?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  lines           InvoiceLine[]
+}
+
+model InvoiceLine {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   @default(0)
+  lineTotal   Float   @default(0)
+  sortOrder   Int     @default(0)
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+  PARTIAL
+}
