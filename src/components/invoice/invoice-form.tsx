@@ -8,13 +8,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PAYMENT_METHODS, PRESET_SERVICES } from "@/lib/constants";
 import { calculateInvoiceTotals, lineTotal } from "@/lib/invoice-math";
 import { formatCurrency } from "@/lib/format";
@@ -193,6 +186,10 @@ export function InvoiceForm({
 
   const fieldClass =
     "border-white/10 bg-black/30 text-zinc-100 placeholder:text-zinc-500";
+  const selectClass = cn(
+    "flex h-8 w-full rounded-lg border px-2.5 text-sm outline-none",
+    fieldClass,
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -331,10 +328,11 @@ export function InvoiceForm({
             >
               <div className="space-y-2">
                 <Label>Service type</Label>
-                <Select
+                <select
+                  className={selectClass}
                   value={line.preset}
-                  onValueChange={(value) => {
-                    const preset = value ?? "Other / Custom Service";
+                  onChange={(e) => {
+                    const preset = e.target.value;
                     updateLine(line.key, {
                       preset,
                       description:
@@ -342,17 +340,12 @@ export function InvoiceForm({
                     });
                   }}
                 >
-                  <SelectTrigger className={cn(fieldClass, "w-full")}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PRESET_SERVICES.map((service) => (
-                      <SelectItem key={service} value={service}>
-                        {service}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {PRESET_SERVICES.map((service) => (
+                    <option key={service} value={service}>
+                      {service}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
@@ -464,44 +457,35 @@ export function InvoiceForm({
           </div>
           <div className="space-y-2">
             <Label>Payment status</Label>
-            <Select
+            <select
+              className={selectClass}
               value={form.paymentStatus}
-              onValueChange={(value) =>
+              onChange={(e) =>
                 setForm({
                   ...form,
-                  paymentStatus: (value as FormState["paymentStatus"]) ?? "UNPAID",
+                  paymentStatus: e.target.value as FormState["paymentStatus"],
                 })
               }
             >
-              <SelectTrigger className={cn(fieldClass, "w-full")}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="UNPAID">Unpaid</SelectItem>
-                <SelectItem value="PAID">Paid</SelectItem>
-                <SelectItem value="PARTIAL">Partially Paid</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="UNPAID">Unpaid</option>
+              <option value="PAID">Paid</option>
+              <option value="PARTIAL">Partially Paid</option>
+            </select>
           </div>
           <div className="space-y-2">
             <Label>Payment method (optional)</Label>
-            <Select
-              value={form.paymentMethod || undefined}
-              onValueChange={(value) =>
-                setForm({ ...form, paymentMethod: value ?? "" })
-              }
+            <select
+              className={selectClass}
+              value={form.paymentMethod}
+              onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
             >
-              <SelectTrigger className={cn(fieldClass, "w-full")}>
-                <SelectValue placeholder="Select method" />
-              </SelectTrigger>
-              <SelectContent>
-                {PAYMENT_METHODS.map((method) => (
-                  <SelectItem key={method} value={method}>
-                    {method}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <option value="">Select method</option>
+              {PAYMENT_METHODS.map((method) => (
+                <option key={method} value={method}>
+                  {method}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="md:col-span-2 space-y-2">
             <Label htmlFor="notes">Notes (optional)</Label>

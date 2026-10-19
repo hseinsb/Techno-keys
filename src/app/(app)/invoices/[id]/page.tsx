@@ -83,7 +83,7 @@ export default async function InvoiceDetailPage({
             {invoice.customerName} · {formatDate(invoice.invoiceDate)}
           </p>
         </div>
-        <InvoiceActions id={invoice.id} number={invoice.number} />
+        <InvoiceActions id={invoice.id} number={invoice.number} showView={false} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">

@@ -20,10 +20,12 @@ export function InvoiceActions({
   id,
   number,
   compact = false,
+  showView = true,
 }: {
   id: string;
   number: string;
   compact?: boolean;
+  showView?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -31,13 +33,15 @@ export function InvoiceActions({
 
   return (
     <div className={cn("flex flex-wrap gap-2", compact && "justify-end")}>
-      <Link
-        href={`/invoices/${id}`}
-        className={cn(buttonVariants({ variant: "outline", size: compact ? "sm" : "default" }), "border-white/15")}
-      >
-        <Eye className="size-4" />
-        {!compact ? "View" : null}
-      </Link>
+      {showView ? (
+        <Link
+          href={`/invoices/${id}`}
+          className={cn(buttonVariants({ variant: "outline", size: compact ? "sm" : "default" }), "border-white/15")}
+        >
+          <Eye className="size-4" />
+          {!compact ? "View" : null}
+        </Link>
+      ) : null}
       <Link
         href={`/invoices/${id}?edit=1`}
         className={cn(buttonVariants({ variant: "outline", size: compact ? "sm" : "default" }), "border-white/15")}
