@@ -89,11 +89,11 @@ export async function listInvoices(search?: string) {
   return prisma.invoice.findMany({
     where: {
       OR: [
-        { customerName: { contains: q } },
-        { number: { contains: q } },
-        { vehicleVin: { contains: q } },
-        { vehicleMake: { contains: q } },
-        { vehicleModel: { contains: q } },
+        { customerName: { contains: q, mode: "insensitive" } },
+        { number: { contains: q, mode: "insensitive" } },
+        { vehicleVin: { contains: q, mode: "insensitive" } },
+        { vehicleMake: { contains: q, mode: "insensitive" } },
+        { vehicleModel: { contains: q, mode: "insensitive" } },
       ],
     },
     orderBy: { createdAt: "desc" },
