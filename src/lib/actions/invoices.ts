@@ -232,6 +232,22 @@ export async function deleteInvoice(id: string) {
   revalidatePath("/invoices");
 }
 
+export async function deleteInvoices(ids: string[]) {
+  await requireAuth();
+  const uniqueIds = [...new Set(ids.filter(Boolean))];
+  if (!uniqueIds.length) {
+    return { deleted: 0 };
+  }
+
+  const result = await prisma.invoice.deleteMany({
+    where: { id: { in: uniqueIds } },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/invoices");
+  return { deleted: result.count };
+}
+
 export async function duplicateInvoice(id: string) {
   await requireAuth();
   const existing = await prisma.invoice.findUnique({

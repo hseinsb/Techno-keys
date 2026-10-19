@@ -102,7 +102,9 @@ export function InvoiceActions({
             try {
               await deleteInvoice(id);
               toast.success("Invoice deleted");
-              router.push("/invoices");
+              if (!compact) {
+                router.push("/invoices");
+              }
               router.refresh();
             } catch {
               toast.error("Could not delete invoice");
